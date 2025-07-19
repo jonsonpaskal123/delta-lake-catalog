@@ -126,9 +126,9 @@ services:
       - ./conf:/opt/bitnami/spark/conf
       - ./jars:/app/jars
     command: >
+      command: >
       /opt/bitnami/spark/bin/spark-submit 
       --master spark://spark-master:7077 
-      --jars /app/jars/* 
       /app/work/etl_elastic_to_delta.py
     depends_on:
       - spark-master
