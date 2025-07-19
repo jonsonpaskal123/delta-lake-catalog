@@ -89,7 +89,13 @@ services:
     volumes:
       - ./work:/home/jovyan/work
       - ./conf:/home/jovyan/conf
-    command: start-notebook.sh --NotebookApp.token='my-secret-token' --NotebookApp.allow_origin='*'
+    command: >
+      start-notebook.sh 
+      --NotebookApp.token='my-secret-token' 
+      --NotebookApp.allow_origin='*' 
+      --NotebookApp.allow_credentials=True 
+      --NotebookApp.allow_headers='*' 
+      --NotebookApp.allow_methods='*'
     networks:
       - delta_network
 
