@@ -61,7 +61,8 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./conf:/opt/bitnami/spark/conf
+      - ./conf/hive-site.xml:/opt/bitnami/spark/conf/hive-site.xml
+      - ./conf/spark-defaults.conf:/opt/bitnami/spark/conf/spark-defaults.conf
       - ./work:/app/work
     networks:
       - delta_network
@@ -116,11 +117,21 @@ services:
     networks:
       - delta_network
 
-  indexer:
-    build:
-      context: ./indexer
+  spark-app:
+    image: bitnami/spark:3
+    container_name: spark-app
+    user: root
+    volumes:
+      - ./work:/app/work
+      - ./conf:/opt/bitnami/spark/conf
+    command: >
+      /opt/bitnami/spark/bin/spark-submit 
+      --master spark://spark-master:7077 
+      --packages io.delta:delta-core_2.12:2.4.0,org.apache.hadoop:hadoop-aws:3.3.4,org.elasticsearch:elasticsearch-spark-30_2.12:8.5.1 
+      /app/work/etl_elastic_to_delta.py
     depends_on:
-      - elasticsearch
+      - spark-master
+      - hive-metastore-client
     networks:
       - delta_network
 
