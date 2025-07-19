@@ -87,6 +87,10 @@ services:
       - SPARK_MASTER=spark://spark-master:7077
       - SPARK_CONF_DIR=/home/jovyan/conf
     command: start-notebook.sh --NotebookApp.token='my-secret-token' --NotebookApp.allow_origin='*' --NotebookApp.allow_credentials=True
+    volumes:
+      - ./work:/home/jovyan/work
+      - ./conf:/home/jovyan/conf
+      - ./jupyter_settings:/home/jovyan/.jupyter/lab/user-settings
     networks:
       - delta_network
 
