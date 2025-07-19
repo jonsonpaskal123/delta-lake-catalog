@@ -79,6 +79,7 @@ services:
   spark-app:
     image: bitnami/spark:3
     container_name: spark-app
+    user: root
     volumes:
       - ./work:/app/work
       - ./conf:/opt/bitnami/spark/conf
@@ -89,6 +90,8 @@ services:
     depends_on:
       - spark-master
       - hive-metastore-client
+    networks:
+      - delta_network
 
   
 
