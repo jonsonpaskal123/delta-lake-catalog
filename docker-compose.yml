@@ -84,18 +84,10 @@ services:
       - "4040:4040"
     environment:
       - JUPYTER_ENABLE_LAB=yes
+      - JUPYTER_TOKEN=my-secret-token
       - SPARK_MASTER=spark://spark-master:7077
       - SPARK_CONF_DIR=/home/jovyan/conf
-    volumes:
-      - ./work:/home/jovyan/work
-      - ./conf:/home/jovyan/conf
-    command: >
-      start-notebook.sh 
-      --NotebookApp.token='my-secret-token' 
-      --NotebookApp.allow_origin='*' 
-      --NotebookApp.allow_credentials=True 
-      --NotebookApp.allow_headers='*' 
-      --NotebookApp.allow_methods='*'
+    command: start-notebook.sh --NotebookApp.allow_origin='*' --NotebookApp.allow_credentials=True
     networks:
       - delta_network
 
