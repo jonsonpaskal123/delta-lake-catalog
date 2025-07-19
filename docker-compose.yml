@@ -76,28 +76,19 @@ services:
     networks:
       - delta_network
 
-  jupyter-lab:
-    image: jupyter/all-spark-notebook:latest
-    container_name: jupyter-lab
-    ports:
-      - "8888:8888"
-      - "4040:4040"
-    environment:
-      - JUPYTER_ENABLE_LAB=yes
-      - SPARK_MASTER=spark://spark-master:7077
-      - SPARK_CONF_DIR=/home/jovyan/conf
-    command: >
-      jupyter lab
-      --ServerApp.token='my-secret-token'
-      --ServerApp.allow_origin='*'
-      --ServerApp.ip='0.0.0.0'
-      --ServerApp.allow_credentials=True
+  spark-app:
+    image: bitnami/spark:3
+    container_name: spark-app
     volumes:
-      - ./work:/home/jovyan/work
-      - ./conf:/home/jovyan/conf
-      - ./jupyter_settings:/home/jovyan/.jupyter/lab/user-settings
-    networks:
-      - delta_network
+      - ./work:/app/work
+      - ./conf:/opt/bitnami/spark/conf
+    command: >
+      /opt/bitnami/spark/bin/spark-submit 
+      --master spark://spark-master:7077 
+      /app/work/main.py
+    depends_on:
+      - spark-master
+      - hive-metastore-client
 
   
 
