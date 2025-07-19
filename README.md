@@ -144,6 +144,35 @@ graph TD
 
 در این بخش، یک خط لوله (Pipeline) کامل برای استخراج (Extract) داده‌ها از ایندکس `person_sabt` در Elasticsearch، تبدیل (Transform) آن‌ها در Spark و در نهایت بارگذاری (Load) آن‌ها به عنوان یک جدول Delta در MinIO را پیاده‌سازی می‌کنیم. متادیتای این جدول نیز در Hive Metastore ثبت خواهد شد.
 
+```mermaid
+flowchart TD
+    A[Elasticsearch<br>(Index: person_sabt)] --> B{Spark Job: etl_elastic_to_delta.py};
+    B -- 1. Extract --> C[DataFrame];
+    C -- 2. Transform --> D[Transformed DataFrame];
+    D -- 3. Load --> E[Delta Lake<br>(Storage: MinIO)];
+    B -.-> F{Hive Metastore<br>(Catalog)};
+    E -.-> F;
+
+    subgraph "Source"
+        A
+    end
+
+    subgraph "Processing"
+        B
+        C
+        D
+    end
+
+    subgraph "Destination"
+        E
+        F
+    end
+
+    style A fill:#3a3,stroke:#333,stroke-width:2px
+    style E fill:#ccf,stroke:#333,stroke-width:2px
+    style F fill:#bbf,stroke:#333,stroke-width:2px
+```
+
 #### مراحل انجام کار:
 
 1.  **به‌روزرسانی پیکربندی Spark:**
