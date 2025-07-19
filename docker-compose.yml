@@ -77,13 +77,14 @@ services:
       - delta_network
 
   jupyter-lab:
-    image: jupyter/pyspark-notebook:latest
+    image: jupyter/all-spark-notebook:latest
     container_name: jupyter-lab
     ports:
       - "8888:8888"
       - "4040:4040"
     environment:
       - JUPYTER_ENABLE_LAB=yes
+      - JUPYTER_TOKEN=my-secret-token
       - SPARK_MASTER=spark://spark-master:7077
       - SPARK_CONF_DIR=/home/jovyan/conf
     volumes:
@@ -91,6 +92,8 @@ services:
       - ./conf:/home/jovyan/conf
     networks:
       - delta_network
+
+  
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0
@@ -118,3 +121,11 @@ services:
 networks:
   delta_network:
     driver: bridge
+
+  indexer:
+    build:
+      context: ./indexer
+    depends_on:
+      - elasticsearch
+    networks:
+      - delta_network
