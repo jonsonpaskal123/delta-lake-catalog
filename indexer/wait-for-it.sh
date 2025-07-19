@@ -5,7 +5,6 @@ set -e
 
 host="$1"
 shift
-cmd="$@"
 
 until nc -z "$host" 9200; do
   >&2 echo "Elasticsearch is unavailable - sleeping"
@@ -13,4 +12,4 @@ until nc -z "$host" 9200; do
 done
 
 >&2 echo "Elasticsearch is up - executing command"
-exec $cmd
+exec "$@"
