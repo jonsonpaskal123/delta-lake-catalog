@@ -61,8 +61,8 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./conf/hive-site.xml:/opt/bitnami/spark/conf/hive-site.xml
-      - ./conf/spark-defaults.conf:/opt/bitnami/spark/conf/spark-defaults.conf
+      - ./conf:/opt/bitnami/spark/conf
+      - ./work:/app/work
     networks:
       - delta_network
 
