@@ -117,31 +117,31 @@ services:
     networks:
       - delta_network
 
-  spark-app:
+  indexer:
+    build:
+      context: ./indexer
+    depends_on:
+      - elasticsearch
+    networks:
+      - delta_network
+
+  etl-job:
     image: bitnami/spark:3
-    container_name: spark-app
+    container_name: etl-job
     user: root
     volumes:
       - ./work:/app/work
       - ./conf:/opt/bitnami/spark/conf
-      - ./jars:/app/jars
     command: >
-      command: >
       /opt/bitnami/spark/bin/spark-submit 
       --master spark://spark-master:7077 
+      --packages io.delta:delta-core_2.12:2.4.0,org.apache.hadoop:hadoop-aws:3.3.4,org.elasticsearch:elasticsearch-spark-30_2.12:8.5.1 
       /app/work/etl_elastic_to_delta.py
     depends_on:
       - spark-master
-      - hive-metastore-client
-      - downloader
+      - indexer
     networks:
       - delta_network
-
-  downloader:
-    build:
-      context: ./downloader
-    volumes:
-      - ./jars:/root/.ivy2/jars
 
 networks:
   delta_network:
