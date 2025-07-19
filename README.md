@@ -146,24 +146,24 @@ graph TD
 
 ```mermaid
 flowchart TD
-    A[Elasticsearch<br>(Index: person_sabt)] --> B{Spark Job: etl_elastic_to_delta.py};
-    B -- 1. Extract --> C[DataFrame];
-    C -- 2. Transform --> D[Transformed DataFrame];
-    D -- 3. Load --> E[Delta Lake<br>(Storage: MinIO)];
-    B -.-> F{Hive Metastore<br>(Catalog)};
+    A[Elasticsearch - person_sabt] --> B{Spark Job};
+    B -- Extract --> C[DataFrame];
+    C -- Transform --> D[Transformed DataFrame];
+    D -- Load --> E[MinIO - Delta Lake];
+    B -.-> F[Hive Metastore];
     E -.-> F;
 
-    subgraph "Source"
+    subgraph Source
         A
     end
 
-    subgraph "Processing"
+    subgraph Processing
         B
         C
         D
     end
 
-    subgraph "Destination"
+    subgraph Destination
         E
         F
     end
