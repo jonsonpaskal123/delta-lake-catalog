@@ -86,7 +86,7 @@ services:
       - JUPYTER_ENABLE_LAB=yes
       - SPARK_MASTER=spark://spark-master:7077
       - SPARK_CONF_DIR=/home/jovyan/conf
-    command: start-notebook.sh --NotebookApp.token='my-secret-token' --NotebookApp.allow_origin='*' --NotebookApp.allow_credentials=True
+    command: start-notebook.sh --NotebookApp.token='my-secret-token' --NotebookApp.allow_origin='*' --NotebookApp.allow_credentials=True --NotebookApp.ip='0.0.0.0'
     volumes:
       - ./work:/home/jovyan/work
       - ./conf:/home/jovyan/conf
