@@ -1,6 +1,7 @@
 
 import time
 from elasticsearch import Elasticsearch
+from elasticsearch.helpers import bulk
 from faker import Faker
 
 # Initialize Faker for generating dummy data
@@ -16,7 +17,7 @@ def get_es_client():
     for _ in range(10):  # Retry for 100 seconds
         try:
             client = Elasticsearch(
-                hosts=[{"host": ES_HOST, "port": ES_PORT, "scheme": "http"}]
+                f"http://{ES_HOST}:{ES_PORT}"
             )
             if client.ping():
                 print("Successfully connected to Elasticsearch!")
@@ -68,14 +69,12 @@ def index_data(client):
 
         # Bulk index every 100 documents
         if len(actions) == 100:
-            from elasticsearch.helpers import bulk
             bulk(client, actions)
             actions = []
             print(f"Indexed {i+1}/1000 documents...")
 
     # Index any remaining actions
     if actions:
-        from elasticsearch.helpers import bulk
         bulk(client, actions)
     
     print("Finished indexing all documents.")
