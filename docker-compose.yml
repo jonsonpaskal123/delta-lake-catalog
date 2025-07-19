@@ -83,23 +83,7 @@ services:
     networks:
       - delta_network
 
-  spark-app:
-    image: bitnami/spark:3
-    container_name: spark-app
-    user: root
-    volumes:
-      - ./work:/app/work
-      - ./conf:/opt/bitnami/spark/conf
-    command: >
-      /opt/bitnami/spark/bin/spark-submit 
-      --master spark://spark-master:7077 
-      /app/work/show_catalog.py
-    depends_on:
-      - spark-master
-      - hive-metastore-client
-        condition: service_healthy
-    networks:
-      - delta_network
+  
 
   
 
