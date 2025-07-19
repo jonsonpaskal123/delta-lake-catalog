@@ -64,6 +64,34 @@
 
 این پروژه با هدف راه‌اندازی یک محیط کامل Delta Lake با استفاده از Apache Spark و یک کاتالوگ خارجی Hive Metastore انجام می‌شود. استفاده از Hive Metastore به ما اجازه می‌دهد تا متادیتای جداول Delta را به صورت متمرکز مدیریت کنیم و چندین جلسه (Session) یا برنامه (Application) مختلف بتوانند به این جداول دسترسی داشته باشند.
 
+### معماری سیستم:
+
+```mermaid
+graph TD
+    subgraph "کاربر"
+        A[Jupyter Lab / PySpark] --> B{Spark Master}
+    end
+
+    subgraph "پردازش"
+        B --> C[Spark Worker 1]
+        B --> D[Spark Worker 2]
+    end
+
+    subgraph "مدیریت متادیتا"
+        B --> E{Hive Metastore}
+        E --> F[(PostgreSQL)]
+    end
+
+    subgraph "ذخیره‌سازی داده"
+        C --> G[(MinIO - S3)]
+        D --> G
+    end
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style E fill:#bbf,stroke:#333,stroke-width:2px
+    style G fill:#ccf,stroke:#333,stroke-width:2px
+```
+
 ### نقشه راه پروژه:
 
 1.  **راه‌اندازی محیط با Docker Compose:**
