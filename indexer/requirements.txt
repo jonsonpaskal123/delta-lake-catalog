@@ -1,2 +1,2 @@
-elasticsearch==8.10.0
+elasticsearch==8.5.1
 Faker==19.13.0
