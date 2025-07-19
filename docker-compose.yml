@@ -54,6 +54,9 @@ services:
       - SPARK_SSL_ENABLED=no
     ports:
       - "8080:8080"
+    volumes:
+      - ./conf/hive-site.xml:/opt/bitnami/spark/conf/hive-site.xml
+      - ./conf/spark-defaults.conf:/opt/bitnami/spark/conf/spark-defaults.conf
     networks:
       - delta_network
 
@@ -68,6 +71,9 @@ services:
       - SPARK_SSL_ENABLED=no
     depends_on:
       - spark-master
+    volumes:
+      - ./conf/hive-site.xml:/opt/bitnami/spark/conf/hive-site.xml
+      - ./conf/spark-defaults.conf:/opt/bitnami/spark/conf/spark-defaults.conf
     networks:
       - delta_network
 
@@ -76,10 +82,14 @@ services:
     container_name: jupyter-lab
     ports:
       - "8888:8888"
+      - "4040:4040"
     environment:
       - JUPYTER_ENABLE_LAB=yes
+      - SPARK_MASTER: spark://spark-master:7077
+      - SPARK_CONF_DIR: /home/jovyan/conf
     volumes:
       - ./work:/home/jovyan/work
+      - ./conf:/home/jovyan/conf
     networks:
       - delta_network
 
