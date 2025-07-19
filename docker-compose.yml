@@ -118,10 +118,6 @@ services:
     networks:
       - delta_network
 
-networks:
-  delta_network:
-    driver: bridge
-
   indexer:
     build:
       context: ./indexer
@@ -129,3 +125,7 @@ networks:
       - elasticsearch
     networks:
       - delta_network
+
+networks:
+  delta_network:
+    driver: bridge

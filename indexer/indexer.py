@@ -9,7 +9,7 @@ fake = Faker()
 # Elasticsearch connection settings
 ES_HOST = "elasticsearch"
 ES_PORT = 9200
-INDEX_NAME = "people"
+INDEX_NAME = "person_sabt"
 
 # Function to create an Elasticsearch client
 def get_es_client():
@@ -36,7 +36,8 @@ def create_index(client):
                 "address": {"type": "text"},
                 "job": {"type": "text"},
                 "company": {"type": "text"},
-                "birthdate": {"type": "date"}
+                "birthdate": {"type": "date"},
+                "national_code": {"type": "keyword"}
             }
         }
         client.indices.create(index=INDEX_NAME, mappings=mapping)
@@ -60,7 +61,8 @@ def index_data(client):
             "address": fake.address(),
             "job": fake.job(),
             "company": fake.company(),
-            "birthdate": fake.date_of_birth(minimum_age=18, maximum_age=70).isoformat()
+            "birthdate": fake.date_of_birth(minimum_age=18, maximum_age=70).isoformat(),
+            "national_code": fake.ssn()
         }
         actions.append({"_index": INDEX_NAME, "_source": doc})
 
